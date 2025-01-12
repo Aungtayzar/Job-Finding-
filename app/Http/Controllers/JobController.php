@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 
 class JobController extends Controller
 {
+    use AuthorizesRequests;
+
     // @desc   Show all jobs
     // @route  GET /jobs
     public function index()
@@ -49,8 +52,8 @@ class JobController extends Controller
             'company_website'=>'nullable|url'
         ]);
 
-        //Hard code user_id
-        $validateData['user_id'] = 1;
+        //Assign Auth user id 
+        $validateData['user_id'] = auth()->user()->id;
 
         //Check for image
         if($request->hasFile('company_logo')){
@@ -79,6 +82,7 @@ class JobController extends Controller
     // @route  GET /jobs/{id}/edit
     public function edit(Job $job)
     {
+        $this->authorize('update', $job);
         return view('jobs.edit')->with('job',$job);
          
     }
@@ -87,6 +91,8 @@ class JobController extends Controller
     // @route  PUT /jobs/{id}
     public function update(Request $request, Job $job)
     {
+        $this->authorize('update', $job);
+
         $validateData = $request->validate([
             'title'=>'required|string|max:255',
             'description'=>'required|string',
@@ -131,6 +137,8 @@ class JobController extends Controller
     // @route DELETE /jobs/{id}
     public function destroy(Job $job)
     {
+
+        $this->authorize('delete', $job);
 
         //if logo then delete it 
         if($job->company_logo){

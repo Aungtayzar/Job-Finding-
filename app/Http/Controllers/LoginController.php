@@ -54,6 +54,7 @@ class LoginController extends Controller
         //delete seesion key
         $request->session()->invalidate();
 
+        //Regenerate the session to prevent fixation attacks
         $request->session()->regenerate();
 
         return redirect('/')->with('success','You are logged out!');
