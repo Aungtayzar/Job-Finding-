@@ -10,7 +10,7 @@
             <x-nav-link url="/jobs" :active="request()->is('jobs')">All Jobs</x-nav-link>
 
             @auth
-            <x-nav-link url="/jobs/saved" :active="request()->is('jobs/saved')">Save Jobs</x-nav-link>
+            <x-nav-link url="/bookmarks" :active="request()->is('bookmarks')">Bookmarks</x-nav-link>
             <x-logout-button />
             <div class="flex items-center space-x-3">
                 <a href="{{route('dashboard')}}">

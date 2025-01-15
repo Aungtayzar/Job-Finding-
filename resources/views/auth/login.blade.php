@@ -4,7 +4,7 @@
         <form action="{{route('login.authenticate')}}" method="POST">
             @csrf 
             <x-inputs.text id="email" name="email" placeholder="Email Address" />
-            <x-inputs.text id="password" name="password" placeholder="Password" />
+            <x-inputs.text id="password" type="password" name="password" placeholder="Password" />
 
 
 
