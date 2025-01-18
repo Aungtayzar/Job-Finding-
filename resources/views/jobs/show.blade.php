@@ -86,16 +86,45 @@
                 </div>
 
                 @endif
+                @auth
                 <p class="my-5">
                     Put "Job Application" as the subject of your email
                     and attach your resume.
                 </p>
-                <a
-                    href="mailto:{{$job->contact_email}}"
-                    class="block w-full text-center px-5 py-2.5 shadow-sm rounded border text-base font-medium cursor-pointer text-indigo-700 bg-indigo-100 hover:bg-indigo-200"
-                >
-                    Apply Now
-                </a>
+
+                <div x-data="{open:false}">
+                    <button @click="open = true" class="block w-full text-center px-5 py-2.5 shadow-sm rounded border text-base font-medium cursor-pointer text-indigo-700 bg-indigo-100 hover:bg-indigo-200">
+                        Apply Now
+                    </button>
+                    <div x-cloak x-show="open" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                        <div @click.away="open = false" class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+                            <h3 class="text-lg font-semibold mb-4"> 
+                                Apply For {{$job->title}}
+                            </h3>
+                            <form action="{{route('applicant.store',$job->id)}}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <x-inputs.text id="full_name" name="full_name" label="Full Name" :required="true"/>
+                                <x-inputs.text id="contact_phone" name="contact_phone" label="Contact Phone" />
+                                <x-inputs.text id="email" name="contact_email" label="Contact Email" :required="true" />
+                                <x-inputs.text-area id="message" name="message" label="Message" />
+
+                                <x-inputs.text id="location" name="location" label="Location" />
+                                <x-inputs.file id="resume" name="resume" label="Upload Your Resume (pdf)" :required="true" />
+
+                                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">Submit Application</button>
+
+                                <button @click="open = false" class="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded-md">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                @else 
+
+                <p class="my-5 bg-gray-200 rounded-lg p-3">
+                    <i class="fas fa-info-circle mr-3"></i> You must be logged in to apply this job.
+                </p>
+
+                @endauth
             </div>
 
             <div class="bg-white p-6 rounded-lg shadow-md mt-6">

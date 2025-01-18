@@ -22,7 +22,7 @@
    @endif 
 
    @if(session('error'))
-    <x-alert type="error" :message="session('error')" />
+    <x-alert type="error" message="{{session('error')}}" />
    @endif 
     {{$slot}}
 </main>
