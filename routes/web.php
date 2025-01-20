@@ -3,6 +3,7 @@
 use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GeocodeController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\LoginController;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomepageController::class,'index'])->name('home');
 
+Route::get('/jobs/search',[JobController::class,'search'])->name('jobs.search');
 // Route::resource('/jobs', JobController::class);
 Route::resource('/jobs', JobController::class)->middleware('auth')->only(['create','edit','update','destroy']);
 Route::resource('/jobs', JobController::class)->except(['create','edit','update','destroy']);
@@ -36,6 +38,9 @@ Route::middleware('auth')->group(function(){
 });
 
 
+
 Route::post('/jobs/{job}/apply', [ApplicantController::class,'store'])->name('applicant.store')->middleware('auth');
 Route::delete('/applicants/{applicant}', [ApplicantController::class,'destroy'])->name('applicant.destroy')->middleware('auth');
+
+Route::get('/geocode',[GeocodeController::class,'geocode']);
 
