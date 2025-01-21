@@ -95,7 +95,46 @@
     <p class="text-gray-700">You have not job listings</p>
     @endforelse
 </div>
+
 </section>
+
+<div class="bg-white p-8 rounded-lg shadow-md w-full">
+    <h3 class="text-3xl text-center font-bold mb-4">Job Applied</h3>
+    @forelse($appliedJobs as $appliedJob)
+        <div class=" border-gray-200 py-2">
+            <div class="border-b-2 p-8 bg-gray-100 flex justify-between items-center ">
+                <div>
+                    <h3 class="text-xl font-semibold">{{ $appliedJob->title }}</h3>
+                    <p class="text-gray-700">{{ $appliedJob->job_type }}</p>
+                    <p class="text-gray-700">{{ $appliedJob->requirements }}</p>
+                </div>
+    
+                <div class="flex space-x-3">
+                    <!-- Check if the appliedJob has applicants -->
+                    @forelse($appliedJob->applicants as $applicant)
+                        <!-- Delete Form -->
+                        <form method="POST" action="{{ route('applicant.destroy', $applicant->id) }}?from=dashboard" onsubmit="return confirm('Are you sure you want to Cancel!')">
+                            @csrf
+                            @method('DELETE')
+                            <button
+                                type="submit"
+                                class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded text-sm"
+                            >
+                                Cancel
+                            </button>
+                        </form>
+                        <!-- End Delete Form -->
+                    @empty
+                        <p class="text-gray-700">No applicants found.</p>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+    @empty
+        <p class="text-gray-700">You don't have apply job.</p>
+    @endforelse
+</div>
+
 <x-bottom-banner />
     
 </x-layout>

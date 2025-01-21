@@ -7,8 +7,10 @@ use App\Models\Job;
 use App\Mail\JobApplied;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class ApplicantController extends Controller
 {
@@ -43,6 +45,12 @@ class ApplicantController extends Controller
         $application = new Applicant($validatedData);
         $application->job_id = $job->id;
         $application->user_id = auth()->id();
+
+        //Check if user own this job 
+        if(auth()->id() == $job->user_id ){
+            return redirect()->back()->with('error','You cannot apply to your own Job.');
+        }
+
         $application->save();
 
         //Send email to Owner (Uncomment after mailtrap compliance form is submitted)
@@ -51,6 +59,7 @@ class ApplicantController extends Controller
         return redirect()->back()->with('success', 'Your application has been submitted');
     }
 
+    
     // @desc Delete job application 
     //@route DELETE applicants/{applicant}
     public function destroy($id):RedirectResponse

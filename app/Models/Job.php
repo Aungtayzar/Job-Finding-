@@ -52,4 +52,9 @@ class Job extends Model
         return $this->hasMany(Applicant::class);
     }
 
+    public function applicantion(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'applicants')->withTimestamps();
+    }
+
 }
