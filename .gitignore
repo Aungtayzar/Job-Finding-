@@ -6,6 +6,7 @@
 /storage/*.key
 /storage/pail
 /vendor
+/_theme_files
 .env
 .env.backup
 .env.production
